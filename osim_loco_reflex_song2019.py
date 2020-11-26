@@ -21,7 +21,7 @@ class OsimReflexCtrl(object):
             self.n_par = len(LocoCtrl.cp_keys)
             control_dimension = 3
         elif self.mode is '2D':
-            self.n_par = 37
+            self.n_par = 31
             control_dimension = 2
         self.cp_map = LocoCtrl.cp_map
         self.ctrl = LocoCtrl(self.dt, control_dimension=control_dimension, params=np.ones(self.n_par))

@@ -37,7 +37,7 @@ class LocoCtrl(object):
     # S_ANKLE = 1 # 1: plantar flexion > 0; -1: dorsiflexion > 0
 
     # muscle names
-    m_keys = ['HAB', 'HAD', 'HFL', 'GLU', 'HAM', 'RF', 'VAS', 'BFSH', 'GAS', 'SOL', 'TA']
+    m_keys = ['HFL', 'GLU', 'HAM', 'RF', 'VAS', 'BFSH', 'GAS', 'SOL', 'TA']
     # body sensor data
     s_b_keys = ['theta', 'd_pos', 'dtheta']
         # theta[0]: around local x axis (pointing anterior)
@@ -80,8 +80,7 @@ class LocoCtrl(object):
         'SOL_1_FG',
         'TA_5_PG', 'TA_5_G_SOL',
         'theta_tgt_f', 'c0_f', 'cv_f',
-        'HAB_3_PG', 'HAB_3_DG', 'HAB_6_PG',
-        'HAD_3_PG', 'HAD_3_DG', 'HAD_6_PG'
+
         ]
 
     par_space = (
@@ -146,8 +145,8 @@ class LocoCtrl(object):
 
         self.n_par = len(LocoCtrl.cp_keys)
         if self.control_dimension == 2:
-            self.n_par = 37
-            self.par_space = (self.par_space[0][0:37], self.par_space[1][0:37])
+            self.n_par = 31
+            self.par_space = (self.par_space[0][0:30], self.par_space[1][0:30])
         self.cp = {}
 
         self.reset(params)
@@ -263,7 +262,7 @@ class LocoCtrl(object):
             cp['HAD_3_DG'] = params[cp_map['HAD_3_DG']] *0.3
             cp['HAD_6_PG'] = params[cp_map['HAD_6_PG']] *2.0
         elif self.control_dimension == 2:
-            if len(params) != 37:
+            if len(params) != 31:
                 raise Exception('error in the number of params!!')
 
         self.cp[s_leg] = cp
@@ -438,23 +437,7 @@ class LocoCtrl(object):
             theta_tgt_f = self.brain_command[s_leg]['theta_tgt_f']
             alpha_tgt_f = self.brain_command[s_leg]['alpha_tgt_f']
 
-            S_HAB_3 = ph_st*s_l['load_ipsi']*np.maximum(
-                - cp['HAB_3_PG']*(theta_f-theta_tgt_f)
-                - cp['HAB_3_DG']*dtheta_f
-                , 0)
-            S_HAB_6 = (ph_st_sw0*s_l['load_contra'] + ph_sw)*np.maximum(
-                cp['HAB_6_PG']*(s_l['alpha_f'] - alpha_tgt_f)
-                , 0)
-            stim['HAB'] = S_HAB_3 + S_HAB_6
 
-            S_HAD_3 = ph_st*s_l['load_ipsi']*np.maximum(
-                cp['HAD_3_PG']*(theta_f-theta_tgt_f)
-                + cp['HAD_3_DG']*dtheta_f
-                , 0)
-            S_HAD_6 = (ph_st_sw0*s_l['load_contra'] + ph_sw)*np.maximum(
-                - cp['HAD_6_PG']*(s_l['alpha_f'] - alpha_tgt_f)
-                , 0)
-            stim['HAD'] = S_HAD_3 + S_HAD_6
 
         S_HFL_3 = ph_st*s_l['load_ipsi']*np.maximum(
             - cp['HFL_3_PG']*(theta-theta_tgt)
