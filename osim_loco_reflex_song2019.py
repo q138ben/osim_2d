@@ -127,13 +127,6 @@ class OsimReflexCtrl(object):
             stim.insert(1, self.ctrl.stim['r_leg']['HAD']) # (add_r)
             stim.insert(11, self.ctrl.stim['l_leg']['HAB']) # (abd_r)
             stim.insert(12, self.ctrl.stim['l_leg']['HAD']) # (add_r)
-        elif self.mode is '2D':
-            Fmax_ABD = 4460.290481
-            Fmax_ADD = 3931.8
 
-            stim.insert(0, .1)
-            stim.insert(1, .1*Fmax_ADD/Fmax_ABD)
-            stim.insert(11, .1)
-            stim.insert(12, .1*Fmax_ADD/Fmax_ABD)
 
         return stim
